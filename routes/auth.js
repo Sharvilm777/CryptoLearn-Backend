@@ -17,7 +17,7 @@ router.post(
     //Check the error array is empty
     //If not then we have to send the errors to the client
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
     //fetching the details from the DB
     let user = await User.findOne({ email: req.body.email });
@@ -52,7 +52,7 @@ router.post(
         .json({ msg: "User signed in succesfully", authToken });
     } else {
       //If it is not matching then the entered password is wrong so we have to send the client a status bad requst and some texts
-      res.status(400).json({ msg: "Entered password is Wrong" });
+      return res.status(400).json({ msg: "Entered password is Wrong" });
     }
   }
 );
@@ -101,7 +101,7 @@ router.post(
       password: securedPassword,
     });
     //Sending the created user to client
-    res.json(user);
+    return res.json(user);
   }
 );
 //Route 3: Get the details of the user :"api/auth/getDetails : LOGIN required"
@@ -115,9 +115,9 @@ router.post("/getDetails", fetchuser, async (req, res) => {
       return res.status(400).json({ msg: "User Doesn't Exists Please Login" });
     }
     //If user is present then we have send all details except password
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 });
 module.exports = router;
